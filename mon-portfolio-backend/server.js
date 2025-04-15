@@ -1,3 +1,5 @@
+require('dotenv').config(); // ✅ Charger les variables d'environnement
+
 const express = require('express');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
@@ -8,8 +10,8 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json()); // Pour analyser les requêtes JSON
-app.use(bodyParser.urlencoded({ extended: true })); // Pour analyser les requêtes URL-encoded
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Route de base
 app.get('/', (req, res) => {
@@ -18,28 +20,27 @@ app.get('/', (req, res) => {
 
 // Route pour envoyer un e-mail
 app.post('/send', (req, res) => {
-    // Vérifiez si req.body est défini
-    console.log('Données du formulaire:', req.body); // Ajoutez cette ligne pour déboguer
+    console.log('Données du formulaire:', req.body);
 
     const { name, email, phone, message } = req.body;
 
-    // Configuration du transporteur Nodemailer
+    // ✅ Configuration avec variables d'environnement
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
-        secure: false, // true pour 465, false pour les autres ports
+        secure: false,
         auth: {
-            user: 'nathan.fauchere23@gmail.com',
-            pass: 'qjxt mznh sdng yipa' // mot de passe d'application
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
         },
         tls: {
-            rejectUnauthorized: false // Ignorer les certificats auto-signés
+            rejectUnauthorized: false
         }
     });
 
     const mailOptions = {
         from: email,
-        to: 'nathan.fauchere23@gmail.com', // Remplacez par votre adresse e-mail
+        to: process.env.EMAIL_USER, // Le mail du destinataire
         subject: `Nouveau message de ${name}`,
         text: `Nom: ${name}\nEmail: ${email}\nTéléphone: ${phone}\nMessage: ${message}`
     };
@@ -54,7 +55,6 @@ app.post('/send', (req, res) => {
     });
 });
 
-// Démarrer le serveur
 app.listen(PORT, () => {
     console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`);
 });
