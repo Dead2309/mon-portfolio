@@ -55,7 +55,7 @@ Ce projet est open-source sous [licence MIT](./LICENSE).
 
 ## 👤 Auteur
 
-- [TonNomOuPseudo](https://github.com/Dead2309)
+- [Dead2309](https://github.com/Dead2309)
 
 ---
 
